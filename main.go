@@ -5,7 +5,6 @@ import (
 
 	"github.com/Poomipat-Ch/StockManagement/configs"
 	"github.com/Poomipat-Ch/StockManagement/server"
-	_ "github.com/lib/pq"
 )
 
 func main() {
