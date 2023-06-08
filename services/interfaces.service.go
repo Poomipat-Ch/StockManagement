@@ -9,7 +9,7 @@ type UserService interface {
 	GetUsers() ([]*models.User, error)
 	GetUserByID(id int) (*models.User, error)
 	GetUserByEmail(email string) (*models.User, error)
-	CreateUser(user *dto.CreateUserRequest) (*dto.CreateUserResponse, error)
+	CreateUser(user *dto.CreateUserRequest) (*dto.CreateUserResponse, []*models.ValidationError, error)
 	UpdateUser(user *models.User) error
 	DeleteUser(id int) error
 }

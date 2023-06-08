@@ -8,6 +8,8 @@ type User struct {
 	LastName       string `json:"last_name" db:"last_name" validate:"required,min=2,max=100"`
 	Email          string `json:"email" db:"email" validate:"required,email"`
 	PasswordHashed string `json:"-" db:"password_hashed" validate:"required,min=8,max=100"`
+	Timestamp
+	SoftDelete
 }
 
 func CreateNewUser(firstName string, lastName string, email string, password string) (*User, error) {

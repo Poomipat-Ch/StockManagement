@@ -5,6 +5,8 @@ import (
 	"strconv"
 
 	"github.com/Poomipat-Ch/StockManagement/routers"
+	"github.com/Poomipat-Ch/StockManagement/routers/user"
+	"github.com/Poomipat-Ch/StockManagement/services"
 )
 
 func (s *Server) runHttpServer() error {
@@ -22,11 +24,15 @@ func (s *Server) runHttpServer() error {
 
 func (s *Server) mapRoutes() {
 	// grouping with version api
+
+	userService := services.NewUserService(s.db, s.v)
+
 	v1 := s.gin.Group("/api/v1")
 	{
-		router := routers.NewRouters(v1) // create new router
+		routes := []routers.Routers{
+			user.NewUserRouter(v1, userService),
+		}
 
-		router.AddPingRoutes()
-		router.AddUserRoutes()
+		routers.MapRoutes(routes...)
 	}
 }

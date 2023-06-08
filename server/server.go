@@ -12,6 +12,9 @@ import (
 	"github.com/Poomipat-Ch/StockManagement/pkg/postgres"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/golang-migrate/migrate/v4"
+	dirverPg "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -42,6 +45,21 @@ func (s *Server) Run() error {
 	}
 
 	s.db = db
+
+	driver, err := dirverPg.WithInstance(s.db.DB, &dirverPg.Config{})
+	if err != nil {
+		return err
+	}
+
+	m, err := migrate.NewWithDatabaseInstance("file://./migrations", "postgres", driver)
+
+	if err != nil {
+		return err
+	}
+
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		return err
+	}
 
 	go func() {
 		if err := s.runHttpServer(); err != nil && err != http.ErrServerClosed {
